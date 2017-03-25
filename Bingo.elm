@@ -8,4 +8,7 @@ givenString =
 
 
 main =
-    Html.text (String.repeat 3 (String.toUpper givenString))
+    givenString
+        |> String.toUpper
+        |> String.repeat 3
+        |> Html.text
