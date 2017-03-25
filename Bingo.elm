@@ -1,7 +1,7 @@
 module Bingo exposing (..)
 
 import Html exposing (Html, text, h2, h1, a, footer, header, div, ul, li, span, button)
-import Html.Attributes exposing (id, class, href)
+import Html.Attributes exposing (id, class, href, classList)
 import Html.Events exposing (onClick)
 
 
@@ -39,13 +39,27 @@ initialEntries =
 
 type Msg
     = NewGame
+    | Mark Int
 
 
 update : Msg -> Model -> Model
 update msg model =
     case msg of
         NewGame ->
-            { model | gameNumber = model.gameNumber + 1 }
+            { model
+                | gameNumber = model.gameNumber + 1
+                , entries = initialEntries
+            }
+
+        Mark id ->
+            let
+                markEntry entry =
+                    if entry.id == id then
+                        { entry | marked = (not entry.marked) }
+                    else
+                        entry
+            in
+                { model | entries = List.map markEntry model.entries }
 
 
 
@@ -84,24 +98,16 @@ viewFooter =
         ]
 
 
-viewEntryList : List Entry -> Html msg
+viewEntryList : List Entry -> Html Msg
 viewEntryList entries =
     entries
         |> List.map viewEntryItem
         |> ul []
 
 
-
---let
---    listOfEntries =
---        (List.map viewEntryItem entries)
---in
---    ul [] listOfEntries
-
-
-viewEntryItem : Entry -> Html msg
+viewEntryItem : Entry -> Html Msg
 viewEntryItem entry =
-    li []
+    li [ classList [ ( "marked", entry.marked ) ], onClick (Mark entry.id) ]
         [ span [ class "phrase" ] [ text entry.phrase ]
         , span [ class "points" ] [ text (toString entry.points) ]
         ]
@@ -118,13 +124,6 @@ view model =
         , div [ class "debug" ] [ text (toString model) ]
         , viewFooter
         ]
-
-
-
---main : Html Msg
---main =
---    update NewGame initialModel
---        |> view
 
 
 main : Program Never Model Msg
