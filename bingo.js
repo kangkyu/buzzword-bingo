@@ -7798,10 +7798,14 @@ var _elm_lang$html$Html$menu = _elm_lang$html$Html$node('menu');
 var _kangkyu$buzzword_bingo$Bingo$givenString = 'bingo!';
 var _kangkyu$buzzword_bingo$Bingo$main = _elm_lang$virtual_dom$Native_VirtualDom.staticProgram(
 	_elm_lang$html$Html$text(
-		A2(
-			_elm_lang$core$String$repeat,
-			3,
-			_elm_lang$core$String$toUpper(_kangkyu$buzzword_bingo$Bingo$givenString))));
+		A3(
+			_elm_lang$core$String$pad,
+			100,
+			_elm_lang$core$Native_Utils.chr('*'),
+			A2(
+				_elm_lang$core$String$repeat,
+				3,
+				_elm_lang$core$String$toUpper(_kangkyu$buzzword_bingo$Bingo$givenString)))));
 
 var Elm = {};
 Elm['Bingo'] = Elm['Bingo'] || {};
