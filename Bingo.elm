@@ -4,6 +4,31 @@ import Html exposing (Html, text, h2, h1, a, footer, header, div)
 import Html.Attributes exposing (id, class, href)
 
 
+type alias Entry =
+    { id : Int, phrase : String, points : Int, marked : Bool }
+
+
+type alias Model =
+    { name : String, gameNumber : Int, entries : List Entry }
+
+
+initialModel : Model
+initialModel =
+    { name = "Mike"
+    , gameNumber = 3
+    , entries = initialEntries
+    }
+
+
+initialEntries : List Entry
+initialEntries =
+    [ Entry 1 "future-proof" 100 False
+    , Entry 2 "doing agile" 200 False
+    , Entry 3 "in the cloud" 300 False
+    , Entry 4 "rock-star ninja" 400 False
+    ]
+
+
 playerInfo : String -> Int -> String
 playerInfo name gameNumber =
     name ++ " - Game #" ++ (toString gameNumber)
@@ -36,15 +61,16 @@ viewFooter =
         ]
 
 
-view : Html msg
-view =
+view : Model -> Html msg
+view model =
     div [ class "content" ]
         [ viewHeader "BUZZWORD BINGO"
-        , viewPlayer "Mike" 3
+        , viewPlayer model.name model.gameNumber
+        , div [ class "debug" ] [ text (toString model) ]
         , viewFooter
         ]
 
 
 main : Html msg
 main =
-    view
+    view initialModel
