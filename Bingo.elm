@@ -105,11 +105,27 @@ viewEntryList entries =
         |> ul []
 
 
+addEntryPoints : List Entry -> Int
+addEntryPoints entries =
+    entries
+        |> List.filter .marked
+        |> List.map .points
+        |> List.sum
+
+
 viewEntryItem : Entry -> Html Msg
 viewEntryItem entry =
     li [ classList [ ( "marked", entry.marked ) ], onClick (Mark entry.id) ]
         [ span [ class "phrase" ] [ text entry.phrase ]
         , span [ class "points" ] [ text (toString entry.points) ]
+        ]
+
+
+viewTotal : Int -> Html msg
+viewTotal number =
+    div [ class "score" ]
+        [ span [ class "label" ] [ text "Score" ]
+        , span [ class "value" ] [ text (toString number) ]
         ]
 
 
@@ -119,6 +135,7 @@ view model =
         [ viewHeader "BUZZWORD BINGO"
         , viewPlayer model.name model.gameNumber
         , viewEntryList model.entries
+        , viewTotal (addEntryPoints model.entries)
         , div [ class "button-group" ]
             [ button [ onClick NewGame ] [ text "New Game" ] ]
         , div [ class "debug" ] [ text (toString model) ]
