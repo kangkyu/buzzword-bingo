@@ -1,6 +1,6 @@
 module Bingo exposing (..)
 
-import Html exposing (Html, text, h2, h1, a, footer, header, div)
+import Html exposing (Html, text, h2, h1, a, footer, header, div, ul, li, span)
 import Html.Attributes exposing (id, class, href)
 
 
@@ -61,11 +61,35 @@ viewFooter =
         ]
 
 
+viewEntryList : List Entry -> Html msg
+viewEntryList entries =
+    entries
+        |> List.map viewEntryItem
+        |> ul []
+
+
+
+--let
+--    listOfEntries =
+--        (List.map viewEntryItem entries)
+--in
+--    ul [] listOfEntries
+
+
+viewEntryItem : Entry -> Html msg
+viewEntryItem entry =
+    li []
+        [ span [ class "phrase" ] [ text entry.phrase ]
+        , span [ class "points" ] [ text (toString entry.points) ]
+        ]
+
+
 view : Model -> Html msg
 view model =
     div [ class "content" ]
         [ viewHeader "BUZZWORD BINGO"
         , viewPlayer model.name model.gameNumber
+        , viewEntryList model.entries
         , div [ class "debug" ] [ text (toString model) ]
         , viewFooter
         ]
