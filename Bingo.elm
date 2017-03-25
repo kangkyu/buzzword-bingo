@@ -1,7 +1,11 @@
 module Bingo exposing (..)
 
-import Html exposing (Html, text, h2, h1, a, footer, header, div, ul, li, span)
+import Html exposing (Html, text, h2, h1, a, footer, header, div, ul, li, span, button)
 import Html.Attributes exposing (id, class, href)
+import Html.Events exposing (onClick)
+
+
+-- MODEL
 
 
 type alias Entry =
@@ -15,7 +19,7 @@ type alias Model =
 initialModel : Model
 initialModel =
     { name = "Mike"
-    , gameNumber = 3
+    , gameNumber = 1
     , entries = initialEntries
     }
 
@@ -27,6 +31,25 @@ initialEntries =
     , Entry 3 "in the cloud" 300 False
     , Entry 4 "rock-star ninja" 400 False
     ]
+
+
+
+-- UPDATE
+
+
+type Msg
+    = NewGame
+
+
+update : Msg -> Model -> Model
+update msg model =
+    case msg of
+        NewGame ->
+            { model | gameNumber = model.gameNumber + 1 }
+
+
+
+-- VIEW
 
 
 playerInfo : String -> Int -> String
@@ -84,17 +107,30 @@ viewEntryItem entry =
         ]
 
 
-view : Model -> Html msg
+view : Model -> Html Msg
 view model =
     div [ class "content" ]
         [ viewHeader "BUZZWORD BINGO"
         , viewPlayer model.name model.gameNumber
         , viewEntryList model.entries
+        , div [ class "button-group" ]
+            [ button [ onClick NewGame ] [ text "New Game" ] ]
         , div [ class "debug" ] [ text (toString model) ]
         , viewFooter
         ]
 
 
-main : Html msg
+
+--main : Html Msg
+--main =
+--    update NewGame initialModel
+--        |> view
+
+
+main : Program Never Model Msg
 main =
-    view initialModel
+    Html.beginnerProgram
+        { model = initialModel
+        , update = update
+        , view = view
+        }
